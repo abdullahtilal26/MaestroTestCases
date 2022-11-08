@@ -19,23 +19,23 @@ contract MaestrosMix is ERC721A, Ownable {
     bool public pauseWL = false; //To pause only WL
     bool public pausePublicSale = false; //To pause only public
     
-    uint8 public maxMintAmountPerWallet = 10; //Max Limit per Wallet
-    uint8 public maxOGFreePerWallet =4; //Max Free mint for WL
-    uint8 public maxWLFreePerWallet =3; //Max Limit per Wallet for WL
-    uint8 public maxPublicFreePerWallet =2; //Max Free mint for WL
+    uint8 public maxMintAmountPerWallet = 5; //Max Limit per Wallet
+    uint8 public maxOGFreePerWallet =2; //Max Free mint for WL
+    uint8 public maxWLFreePerWallet =1; //Max Limit per Wallet for WL
+    uint8 public maxPublicFreePerWallet =1; //Max Free mint for WL
     
     uint256 public cost = 0.0001 ether;
-    uint256 public maxSupply = 75;
+    uint256 public maxSupply = 1920;
 
     uint256 public OGMinted=0;
     uint256 public WLMinted=0;
     uint256 public publicFreeMinted=0;
     uint256 public paidMinted=0;
 
-    uint256 public totalOGLimit=10;
-    uint256 public totalWLLimit=10;
-    uint256 public totalPublicFreeLimit=10;
-    uint256 public totalPaidLimit=40;
+    uint256 public totalOGLimit=250;
+    uint256 public totalWLLimit=500;
+    uint256 public totalPublicFreeLimit=150;
+    uint256 public totalPaidLimit=1000;
 
     string private baseURI;
     string public baseExtension = ".json";
@@ -60,7 +60,7 @@ contract MaestrosMix is ERC721A, Ownable {
         setNotRevealedURI(_initNotRevealedUri);
         OGRoot=_OGRoot;
         WLRoot=_WLRoot;
-        _safeMint(msg.sender, 5);
+        _safeMint(msg.sender, 20);
     }
 
     ///@notice some common conditions for public and pre sale that needs to be true like minting is not paused,amount to mint is greater than 0,supply dont exceed more than the total supply and sender dont exceed the max mint amount set

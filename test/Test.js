@@ -6,7 +6,7 @@ const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 
 describe("Test Cases for Individual Limit of each List", function () {
-  // this.timeout(120000);
+  this.timeout(120000);
   let data = {};
   const whiteListO = [];
   const whiteListL = [];
@@ -16,7 +16,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     const [address1] = await ethers.getSigners();
 
     //GENERATING OG ACCOUNTS
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 251; i++) {
       let wallet = await ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -31,7 +31,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     }
 
     //GENERATING WL ACCOUNTS
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 501; i++) {
       let wallet = ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -92,9 +92,11 @@ describe("Test Cases for Individual Limit of each List", function () {
     //     keccak256("0x5B38Da6a701c568545dCfcB03FcB875f56beddC4")
     //   )
     // );
+    
   });
 
   it("Donot Excede the free per wallet limit of public sale", async function () {
+   
     const publicAccount = [];
     const [addr1] = await ethers.getSigners();
     for (let i = 0; i < 1; i++) {
@@ -126,7 +128,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     console.log();
   });
 
-  it("Excede the free per wallet limit of public sale with 0.001 ether ", async function () {
+  it("Excede the free per wallet limit of public sale with 0.005 ether ", async function () {
     const acc = await ethers.getSigners();
     const publicAccount = [];
     const [addr1] = await ethers.getSigners();
@@ -154,10 +156,10 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(publicAccount[i])
-        .PublicMint(3, { value: ethers.utils.parseEther("0.001").toString() });
+        .PublicMint(2, { value: ethers.utils.parseEther("0.005").toString() });
     }
-    expect(await contract.publicFreeMinted()).to.equal(2);
-    expect(await contract.balanceOf(publicAccount[0].address)).to.equal(3);
+    expect(await contract.publicFreeMinted()).to.equal(1);
+    expect(await contract.balanceOf(publicAccount[0].address)).to.equal(2);
     console.log();
   });
 
@@ -189,7 +191,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(publicAccount[i])
-        .PublicMint(3, { value: ethers.utils.parseEther("0.001").toString() });
+        .PublicMint(2, { value: ethers.utils.parseEther("0.005").toString() });
     }
     await expect(
       contract.connect(publicAccount[0]).PublicMint(1)
@@ -226,16 +228,16 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(publicAccount[i])
-        .PublicMint(10, { value: ethers.utils.parseEther("0.008").toString() });
+        .PublicMint(5, { value: ethers.utils.parseEther("0.02").toString() });
     }
     await expect(
       contract
         .connect(publicAccount[0])
-        .PublicMint(1, { value: ethers.utils.parseEther("0.001").toString() })
+        .PublicMint(1, { value: ethers.utils.parseEther("0.005").toString() })
     ).to.be.revertedWith("Max lmit of tokens exceeded");
   });
 
-  // //   ------------------------------
+  // // //   ------------------------------
   it("Donot Excede the free per wallet limit of OG", async function () {
     // const acc = await ethers.getSigners();
     // const publicAccount = [];
@@ -266,12 +268,12 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListOWallet[i])
-        .OGMint(4, data["OG_PROOFS"][whiteListO[i]]);
+        .OGMint(2, data["OG_PROOFS"][whiteListO[i]]);
     }
-    expect(await contract.balanceOf(whiteListOWallet[0].address)).to.equal(4);
+    expect(await contract.balanceOf(whiteListOWallet[0].address)).to.equal(2);
   });
 
-  it("Excede the free per wallet limit of OG with 0.001 ether ", async function () {
+  it("Excede the free per wallet limit of OG with 0.005 ether ", async function () {
     // const acc = await ethers.getSigners();
     // const publicAccount = [];
     // const publicAccountAddress = [];
@@ -301,12 +303,12 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListOWallet[i])
-        .OGMint(5, data["OG_PROOFS"][whiteListO[i]], {
-          value: ethers.utils.parseEther("0.001").toString(),
+        .OGMint(3, data["OG_PROOFS"][whiteListO[i]], {
+          value: ethers.utils.parseEther("0.005").toString(),
         });
     }
-    expect(await contract.OGMinted()).to.equal(4);
-    expect(await contract.balanceOf(whiteListOWallet[0].address)).to.equal(5);
+    expect(await contract.OGMinted()).to.equal(2);
+    expect(await contract.balanceOf(whiteListOWallet[0].address)).to.equal(3);
     console.log();
   });
 
@@ -340,7 +342,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListOWallet[i])
-        .OGMint(4, data["OG_PROOFS"][whiteListO[i]]);
+        .OGMint(2, data["OG_PROOFS"][whiteListO[i]]);
     }
     await expect(
       contract
@@ -381,19 +383,19 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListOWallet[i])
-        .OGMint(10, data["OG_PROOFS"][whiteListO[i]], {
-          value: ethers.utils.parseEther("0.006").toString(),
+        .OGMint(5, data["OG_PROOFS"][whiteListO[i]], {
+          value: ethers.utils.parseEther("0.015").toString(),
         });
     }
     await expect(
       contract
         .connect(whiteListOWallet[0])
         .OGMint(1, data["OG_PROOFS"][whiteListO[0]], {
-          value: ethers.utils.parseEther("0.001").toString(),
+          value: ethers.utils.parseEther("0.005").toString(),
         })
     ).to.be.revertedWith("Max lmit of tokens exceeded");
   });
-  // // ---------------------------------------- WL-----------------
+  // // // ---------------------------------------- WL-----------------
   it("Donot Excede the free per wallet limit of WL", async function () {
     // const acc = await ethers.getSigners();
     // const publicAccount = [];
@@ -424,9 +426,9 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListLWallet[i])
-        .WLMint(3, data["WL_PROOFS"][whiteListL[i]]);
+        .WLMint(1, data["WL_PROOFS"][whiteListL[i]]);
     }
-    expect(await contract.balanceOf(whiteListLWallet[0].address)).to.equal(3);
+    expect(await contract.balanceOf(whiteListLWallet[0].address)).to.equal(1);
     console.log();
   });
 
@@ -459,7 +461,7 @@ describe("Test Cases for Individual Limit of each List", function () {
     for (let i = 0; i < 1; i++) {
       await contract
         .connect(whiteListLWallet[i])
-        .WLMint(3, data["WL_PROOFS"][whiteListL[i]]);
+        .WLMint(1, data["WL_PROOFS"][whiteListL[i]]);
     }
     await expect(
       contract
@@ -550,6 +552,7 @@ describe("Test Cases for Individual Limit of each List", function () {
 });
 
 describe("Test Cases for Overall Limit of each list", function () {
+    this.timeout(120000);
   let data = {};
   const whiteListO = [];
   const whiteListL = [];
@@ -560,7 +563,7 @@ describe("Test Cases for Overall Limit of each list", function () {
     const [address1] = await ethers.getSigners();
 
     //GENERATING OG ACCOUNTS
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 251; i++) {
       let wallet = await ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -575,7 +578,7 @@ describe("Test Cases for Overall Limit of each list", function () {
     }
 
     //GENERATING WL ACCOUNTS
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 501; i++) {
       let wallet = ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -642,7 +645,7 @@ describe("Test Cases for Overall Limit of each list", function () {
     const acc = await ethers.getSigners();
     const whiteListAccounts = [];
     const [addr1] = await ethers.getSigners();
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 150; i++) {
       let wallet = ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -663,10 +666,10 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 150; i++) {
       await contract.connect(whiteListAccounts[i]).PublicMint(1);
     }
-    expect(await contract.publicFreeMinted()).to.equal(10);
+    expect(await contract.publicFreeMinted()).to.equal(150);
     console.log();
   });
 
@@ -674,7 +677,7 @@ describe("Test Cases for Overall Limit of each list", function () {
     const acc = await ethers.getSigners();
     const whiteListAccounts = [];
     const [addr1] = await ethers.getSigners();
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 151; i++) {
       let wallet = ethers.Wallet.createRandom();
       // add the provider from Hardhat
       wallet = wallet.connect(ethers.provider);
@@ -695,12 +698,12 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 150; i++) {
       await contract.connect(whiteListAccounts[i]).PublicMint(1);
     }
 
     await expect(
-      contract.connect(whiteListAccounts[10]).PublicMint(1)
+      contract.connect(whiteListAccounts[150]).PublicMint(1)
     ).to.be.revertedWith("Insuffiecient funds transfered");
     // .to.throw(
     //   new Error(
@@ -720,12 +723,12 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 250; i++) {
       await contract
         .connect(whiteListOWallet[i])
         .OGMint(1, data["OG_PROOFS"][whiteListO[i]]);
     }
-    expect(await contract.OGMinted()).to.equal(10);
+    expect(await contract.OGMinted()).to.equal(250);
   });
 
   it("Excede the limit of OG", async function () {
@@ -739,15 +742,15 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 125; i++) {
       await contract
         .connect(whiteListOWallet[i])
         .OGMint(2, data["OG_PROOFS"][whiteListO[i]]);
     }
     await expect(
       contract
-        .connect(whiteListOWallet[5])
-        .OGMint(1, data["OG_PROOFS"][whiteListO[5]])
+        .connect(whiteListOWallet[125])
+        .OGMint(1, data["OG_PROOFS"][whiteListO[125]])
     ).to.be.revertedWith("Insuffiecient funds transfered");
     console.log();
   });
@@ -763,12 +766,12 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 500; i++) {
       await contract
         .connect(whiteListLWallet[i])
-        .WLMint(2, data["WL_PROOFS"][whiteListL[i]]);
+        .WLMint(1, data["WL_PROOFS"][whiteListL[i]]);
     }
-    expect(await contract.WLMinted()).to.equal(10);
+    expect(await contract.WLMinted()).to.equal(500);
     console.log();
   });
 
@@ -783,15 +786,15 @@ describe("Test Cases for Overall Limit of each list", function () {
       data["WL ROOT HASH"]
     );
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 500; i++) {
       await contract
         .connect(whiteListLWallet[i])
-        .WLMint(2, data["WL_PROOFS"][whiteListL[i]]);
+        .WLMint(1, data["WL_PROOFS"][whiteListL[i]]);
     }
     await expect(
       contract
-        .connect(whiteListLWallet[5])
-        .WLMint(2, data["WL_PROOFS"][whiteListL[5]])
+        .connect(whiteListLWallet[500])
+        .WLMint(1, data["WL_PROOFS"][whiteListL[500]])
     ).to.be.revertedWith("Insuffiecient funds transfered");
     console.log();
   });
